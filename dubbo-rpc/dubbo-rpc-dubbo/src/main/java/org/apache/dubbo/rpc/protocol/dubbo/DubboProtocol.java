@@ -104,6 +104,7 @@ public class DubboProtocol extends AbstractProtocol {
                         return null;
                     }
                 }
+                // set RpcContext
                 RpcContext rpcContext = RpcContext.getContext();
                 boolean supportServerAsync = invoker.getUrl().getMethodParameter(inv.getMethodName(), Constants.ASYNC_KEY, false);
                 if (supportServerAsync) {
@@ -223,6 +224,7 @@ public class DubboProtocol extends AbstractProtocol {
         }
         String serviceKey = serviceKey(port, path, inv.getAttachments().get(Constants.VERSION_KEY), inv.getAttachments().get(Constants.GROUP_KEY));
 
+        // key point find the service refer's exporter.
         DubboExporter<?> exporter = (DubboExporter<?>) exporterMap.get(serviceKey);
 
         if (exporter == null) {
@@ -291,6 +293,14 @@ public class DubboProtocol extends AbstractProtocol {
         }
     }
 
+    /**
+     * dubbo protocol create server and add requestHandler {@link #requestHandler} to server.
+     *
+     * so that server will use requestHandler to process request .
+     *
+     * @param url
+     * @return
+     */
     private ExchangeServer createServer(URL url) {
         // send readonly event when server closes, it's enabled by default
         url = url.addParameterIfAbsent(Constants.CHANNEL_READONLYEVENT_SENT_KEY, Boolean.TRUE.toString());

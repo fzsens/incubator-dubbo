@@ -20,6 +20,9 @@ import org.apache.dubbo.common.extension.SPI;
 
 
 /**
+ *
+ * define dubbo remote communicate action.
+ *
  * ChannelHandler. (API, Prototype, ThreadSafe)
  *
  * @see org.apache.dubbo.remoting.Transporter#bind(org.apache.dubbo.common.URL, ChannelHandler)

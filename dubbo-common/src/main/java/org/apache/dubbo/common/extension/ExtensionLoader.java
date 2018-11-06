@@ -774,6 +774,13 @@ public class ExtensionLoader<T> {
         return compiler.compile(code, classLoader);
     }
 
+    /**
+     * create xxx$Adaptive class code . such as Protocol$Adaptive and ProxyFactory$Adaptive
+     *
+     * those *$Adaptive class will
+     *
+     * @return
+     */
     private String createAdaptiveExtensionClassCode() {
         StringBuilder codeBuilder = new StringBuilder();
         Method[] methods = type.getMethods();

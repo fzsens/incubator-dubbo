@@ -31,6 +31,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * NettyClientHandler
+ *
+ * dubbo encapsulate Channel with {@link ChannelHandler}
+ *
+ * this create a bridge between dubbo {@link ChannelHandler} and netty4 {@link ChannelDuplexHandler}
+ *
  */
 @io.netty.channel.ChannelHandler.Sharable
 public class NettyServerHandler extends ChannelDuplexHandler {
