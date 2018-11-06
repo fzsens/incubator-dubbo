@@ -35,6 +35,11 @@ public interface Exchanger {
     /**
      * bind.
      *
+     * more details :
+     *     start a server like nettyServer or mimaServer to listen the port
+     *     add filter ( for mima) or handler (for netty) to the server
+     *     that create a brige to connect transport layer and protocol layer.
+     *
      * @param url
      * @param handler
      * @return message server

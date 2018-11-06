@@ -87,6 +87,7 @@ public class NettyHandler extends SimpleChannelHandler {
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.getChannel(), url, handler);
         try {
+            // adapt netty handler to dubbo handler .
             handler.received(channel, e.getMessage());
         } finally {
             NettyChannel.removeChannelIfDisconnected(ctx.getChannel());

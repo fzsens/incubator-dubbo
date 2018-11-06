@@ -38,6 +38,9 @@ import java.util.concurrent.CompletableFuture;
 
 
 /**
+ *
+ * key point of dubbo communication pattern.
+ *
  * ExchangeReceiver
  */
 public class HeaderExchangeHandler implements ChannelHandlerDelegate {
@@ -77,6 +80,16 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
         }
     }
 
+    /**
+     * implement request-response communication pattern
+     *
+     * 1. call {@link ExchangeHandler#reply } to fill the response
+     * 2. return the response throught {@link ExchangeChannel}
+     *
+     * @param channel
+     * @param req
+     * @throws RemotingException
+     */
     void handleRequest(final ExchangeChannel channel, Request req) throws RemotingException {
         Response res = new Response(req.getId(), req.getVersion());
         if (req.isBroken()) {

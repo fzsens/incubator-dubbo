@@ -30,6 +30,8 @@ public interface ExchangeHandler extends ChannelHandler, TelnetHandler {
     /**
      * reply.
      *
+     * deal with requet ,use {@link CompletableFuture} create new asynchronize call api.
+     *
      * @param channel
      * @param request
      * @return response
