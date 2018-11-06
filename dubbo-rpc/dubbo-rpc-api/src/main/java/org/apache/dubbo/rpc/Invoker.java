@@ -21,6 +21,11 @@ import org.apache.dubbo.common.Node;
 /**
  * Invoker. (API/SPI, Prototype, ThreadSafe)
  *
+ * <p/>
+ * dubbo's core domain . it represent a executeable entity (local/remote/cluster)
+ *
+ * that you can start a remote produce call by using it.
+ *
  * @see org.apache.dubbo.rpc.Protocol#refer(Class, org.apache.dubbo.common.URL)
  * @see org.apache.dubbo.rpc.InvokerListener
  * @see org.apache.dubbo.rpc.protocol.AbstractInvoker

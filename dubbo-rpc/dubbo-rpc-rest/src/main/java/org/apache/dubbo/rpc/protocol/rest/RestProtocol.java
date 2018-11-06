@@ -25,7 +25,6 @@ import org.apache.dubbo.remoting.http.servlet.ServletManager;
 import org.apache.dubbo.rpc.RpcException;
 import org.apache.dubbo.rpc.model.ApplicationModel;
 import org.apache.dubbo.rpc.protocol.AbstractProxyProtocol;
-
 import org.apache.http.HeaderElement;
 import org.apache.http.HeaderElementIterator;
 import org.apache.http.HttpResponse;
@@ -61,7 +60,7 @@ public class RestProtocol extends AbstractProxyProtocol {
 
     private static final int HTTPCLIENTCONNECTIONMANAGER_MAXPERROUTE = 20;
     private static final int HTTPCLIENTCONNECTIONMANAGER_MAXTOTAL = 20;
-    private static final int HTTPCLIENT_KEEPALIVEDURATION = 30*1000;
+    private static final int HTTPCLIENT_KEEPALIVEDURATION = 30 * 1000;
     private static final int HTTPCLIENTCONNECTIONMANAGER_CLOSEWAITTIME_MS = 1000;
     private static final int HTTPCLIENTCONNECTIONMANAGER_CLOSEIDLETIME_S = 30;
 
@@ -238,8 +237,10 @@ public class RestProtocol extends AbstractProxyProtocol {
     }
 
     protected String getContextPath(URL url) {
-        String contextPath = url.getPath();
-        return contextPath.endsWith("/") ? contextPath.substring(0,contextPath.length()-1) : contextPath;
+        String path = url.getPath();
+        int firstSlash = path.indexOf("/");
+        String contextPath = firstSlash == -1 ? path : path.substring(0, firstSlash);
+        return contextPath.endsWith("/") ? contextPath.substring(0, contextPath.length() - 1) : contextPath;
     }
 
     protected class ConnectionMonitor extends Thread {

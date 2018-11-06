@@ -22,6 +22,9 @@ import org.apache.dubbo.common.extension.SPI;
 
 /**
  * Protocol. (API/SPI, Singleton, ThreadSafe)
+ * <p/>
+ *
+ * dubbo's service domain. manage the {@link Invoker}'s lifecycle includde refer and export.
  */
 @SPI("dubbo")
 public interface Protocol {
