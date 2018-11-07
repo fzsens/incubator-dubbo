@@ -50,6 +50,7 @@ public class DefaultFuture implements ResponseFuture {
 
     private static final Map<Long, Channel> CHANNELS = new ConcurrentHashMap<>();
 
+    // trace relationship between request-id and response
     private static final Map<Long, DefaultFuture> FUTURES = new ConcurrentHashMap<>();
 
     public static final Timer TIME_OUT_TIMER = new HashedWheelTimer(
@@ -142,6 +143,22 @@ public class DefaultFuture implements ResponseFuture {
         }
     }
 
+    /**
+     * async message design pattern.
+     *
+     * 1. channel is one way communication pattern
+     * 2. send and received message has not relationship with each other.
+     * 3. we create a request and sent it through channel, at the sometimes,
+     *    we create a {@link DefaultFuture} and save it to {@link DefaultFuture#FUTURES}.
+     *    see {@link org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeChannel#request(Object)}
+     * 4. channel will send message independent. see {@link org.apache.dubbo.remoting.transport.AbstractClient#send(Object)}
+     * 5. received message is independent too. see {@link org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeHandler#received(Channel, Object)}
+     *    this method will call {@link DefaultFuture#received(Channel, Response)}
+     * 6. the response.getId equals with request.getId , so we can find the {@link DefaultFuture} that we create for the request.
+     *
+     * @param channel
+     * @param response
+     */
     public static void received(Channel channel, Response response) {
         try {
             DefaultFuture future = FUTURES.remove(response.getId());
@@ -226,6 +243,11 @@ public class DefaultFuture implements ResponseFuture {
         }
     }
 
+    /**
+     * timeout design pattern
+     *     create a task check future's status
+     *     if timeout create a timeout-exception response and return it.
+     */
     private static class TimeoutCheckTask implements TimerTask {
 
         private DefaultFuture future;

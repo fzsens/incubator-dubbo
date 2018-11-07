@@ -51,6 +51,10 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
 
     public static String KEY_WRITE_TIMESTAMP = HeartbeatHandler.KEY_WRITE_TIMESTAMP;
 
+    /**
+     * closure function , is a bridge between network and Invoker
+     * see {@link DubboProtocol#requestHandler}
+     */
     private final ExchangeHandler handler;
 
     public HeaderExchangeHandler(ExchangeHandler handler) {
@@ -216,6 +220,7 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
                     }
                 }
             } else if (message instanceof Response) {
+                // client side received response handle response
                 handleResponse(channel, (Response) message);
             } else if (message instanceof String) {
                 if (isClientSide(channel)) {

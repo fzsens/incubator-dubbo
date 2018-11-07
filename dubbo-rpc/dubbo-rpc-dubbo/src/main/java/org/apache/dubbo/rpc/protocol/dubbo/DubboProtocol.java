@@ -74,6 +74,15 @@ public class DubboProtocol extends AbstractProtocol {
     //consumer side export a stub service for dispatching event
     //servicekey-stubmethods
     private final ConcurrentMap<String, String> stubServiceMethodsMap = new ConcurrentHashMap<String, String>();
+
+    /**
+     *  this handler will wrap in HeaderExchangeHandler.
+     *
+     *  HeaderExchangeHandler deal with network communication's details. but it didn't know how to find Invoker.
+     *
+     *  requestHandler just like a closure or hook function , HeaderExchangeHandler can use it find and invoke the Invoker.
+     *
+     */
     private ExchangeHandler requestHandler = new ExchangeHandlerAdapter() {
 
         @Override
