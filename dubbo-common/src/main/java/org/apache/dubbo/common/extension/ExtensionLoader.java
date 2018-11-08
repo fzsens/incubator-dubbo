@@ -73,7 +73,7 @@ public class ExtensionLoader<T> {
 
     private static final ConcurrentMap<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<Class<?>, Object>();
 
-    // ==============================
+    // ==============instance variable================
 
     private final Class<?> type;
 
@@ -94,6 +94,10 @@ public class ExtensionLoader<T> {
 
     private Map<String, IllegalStateException> exceptions = new ConcurrentHashMap<String, IllegalStateException>();
 
+    /**
+     * create ExtensionLoader .
+     * @param type the type annotation with {@link SPI}
+     */
     private ExtensionLoader(Class<?> type) {
         this.type = type;
         objectFactory = (type == ExtensionFactory.class ? null : ExtensionLoader.getExtensionLoader(ExtensionFactory.class).getAdaptiveExtension());
@@ -115,9 +119,10 @@ public class ExtensionLoader<T> {
             throw new IllegalArgumentException("Extension type(" + type +
                     ") is not extension, because WITHOUT @" + SPI.class.getSimpleName() + " Annotation!");
         }
-
+        // each type has a ExtensionLoader
         ExtensionLoader<T> loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         if (loader == null) {
+            // first call init ExtensionLoader for the type
             EXTENSION_LOADERS.putIfAbsent(type, new ExtensionLoader<T>(type));
             loader = (ExtensionLoader<T>) EXTENSION_LOADERS.get(type);
         }
@@ -177,6 +182,10 @@ public class ExtensionLoader<T> {
 
     /**
      * Get activate extensions.
+     *
+     * the class has many implements .
+     *
+     * you can use this method to get those that be annotate with {@link Activate} and according to your conditions (values 、group).
      *
      * @param url    url
      * @param values extension point names
@@ -322,6 +331,7 @@ public class ExtensionLoader<T> {
             synchronized (holder) {
                 instance = holder.get();
                 if (instance == null) {
+                    // first visit create extension.
                     instance = createExtension(name);
                     holder.set(instance);
                 }
@@ -572,6 +582,9 @@ public class ExtensionLoader<T> {
         return clazz;
     }
 
+    /**
+     * find classes defined in spi folders .(not wrappers those will automatic wrap)
+     */
     private Map<String, Class<?>> getExtensionClasses() {
         Map<String, Class<?>> classes = cachedClasses.get();
         if (classes == null) {
@@ -590,6 +603,10 @@ public class ExtensionLoader<T> {
     private Map<String, Class<?>> loadExtensionClasses() {
         final SPI defaultAnnotation = type.getAnnotation(SPI.class);
         if (defaultAnnotation != null) {
+            /**
+             *  default extension name
+             *  {@link ExtensionLoader#getDefaultExtension()}
+             */
             String value = defaultAnnotation.value();
             if ((value = value.trim()).length() > 0) {
                 String[] names = NAME_SEPARATOR.split(value);
@@ -672,6 +689,10 @@ public class ExtensionLoader<T> {
         }
     }
 
+    /**
+     * init extensionClasses
+     * @throws NoSuchMethodException
+     */
     private void loadClass(Map<String, Class<?>> extensionClasses, java.net.URL resourceURL, Class<?> clazz, String name) throws NoSuchMethodException {
         if (!type.isAssignableFrom(clazz)) {
             throw new IllegalStateException("Error when load extension class(interface: " +
@@ -679,6 +700,8 @@ public class ExtensionLoader<T> {
                     + clazz.getName() + "is not subtype of interface.");
         }
         if (clazz.isAnnotationPresent(Adaptive.class)) {
+            // if class is annotate with @Adaptive , it mean that this class will the default implement of the type
+            // save clazz to cachedAdaptiveClass
             if (cachedAdaptiveClass == null) {
                 cachedAdaptiveClass = clazz;
             } else if (!cachedAdaptiveClass.equals(clazz)) {
@@ -687,6 +710,8 @@ public class ExtensionLoader<T> {
                         + ", " + clazz.getClass().getName());
             }
         } else if (isWrapperClass(clazz)) {
+            // if class has constructor with argument type then it will be work as wrapper.
+            // wrapper will wrap the actually implement ,just like aop
             Set<Class<?>> wrappers = cachedWrapperClasses;
             if (wrappers == null) {
                 cachedWrapperClasses = new ConcurrentHashSet<Class<?>>();
@@ -694,6 +719,7 @@ public class ExtensionLoader<T> {
             }
             wrappers.add(clazz);
         } else {
+            // if class is commonly not any special . put it into extensionClasses.
             clazz.getConstructor();
             if (name == null || name.length() == 0) {
                 name = findAnnotationName(clazz);
@@ -703,10 +729,16 @@ public class ExtensionLoader<T> {
             }
             String[] names = NAME_SEPARATOR.split(name);
             if (names != null && names.length > 0) {
+                /** if class has been annotate with @Activate ,
+                 * it is mean that this class will active automatic or active when according to condition
+                 * put it to cachedActivities
+                 * refer to {{@link #getActivateExtension(URL, String[], String)}}
+                 **/
                 Activate activate = clazz.getAnnotation(Activate.class);
                 if (activate != null) {
                     cachedActivates.put(names[0], activate);
                 } else {
+                    // for compatible with old version
                     // support com.alibaba.dubbo.common.extension.Activate
                     com.alibaba.dubbo.common.extension.Activate oldActivate = clazz.getAnnotation(com.alibaba.dubbo.common.extension.Activate.class);
                     if (oldActivate != null) {
@@ -759,6 +791,15 @@ public class ExtensionLoader<T> {
         }
     }
 
+    /**
+     * create Adaptive class
+     * if has any implement class annotate with {@link Adaptive} then return it.
+     * others, return an xxx$Adaptive generate by hard code.
+     * in this situation xxx's method must annotate with {@link Adaptive}
+     * and  parameters must have type {@link URL} or {@link URL} attribute in parameters
+     *
+     * xxx$Adaptive will according URL and method's {@link Adaptive} value decide which implement of this class will be execute.
+     */
     private Class<?> getAdaptiveExtensionClass() {
         getExtensionClasses();
         if (cachedAdaptiveClass != null) {

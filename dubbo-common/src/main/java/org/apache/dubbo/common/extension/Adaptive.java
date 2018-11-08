@@ -27,6 +27,13 @@ import java.lang.annotation.Target;
 /**
  * Provide helpful information for {@link ExtensionLoader} to inject dependency extension instance.
  *
+ * 1. ElementType.Type :
+ *     if a implement annotate with @Adaptive means that this implement will return when {@link ExtensionLoader#getAdaptiveExtension()}
+ * 2. ElementType.Method
+ *     2.1 method must have parameter type {@link URL} or attributes type {@link URL} in parameters
+ *     2.2 {@link ExtensionLoader} will according to {@link Adaptive#value()} and parameter {@link URL}'s value
+ *          find actually implement and execute method.
+ *
  * @see ExtensionLoader
  * @see URL
  */
