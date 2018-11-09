@@ -181,6 +181,9 @@ public class DefaultFuture implements ResponseFuture {
         return get(timeout);
     }
 
+    /**
+     * get response with timeout
+     */
     @Override
     public Object get(int timeout) throws RemotingException {
         if (timeout <= 0) {
@@ -353,6 +356,7 @@ public class DefaultFuture implements ResponseFuture {
         try {
             response = res;
             if (done != null) {
+                // wake up.
                 done.signal();
             }
         } finally {

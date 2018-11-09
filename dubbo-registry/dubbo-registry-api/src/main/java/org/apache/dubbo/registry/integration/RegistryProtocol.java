@@ -122,14 +122,24 @@ public class RegistryProtocol implements Protocol {
         return overrideListeners;
     }
 
+    /**
+     * register to registry.
+     */
     public void register(URL registryUrl, URL registedProviderUrl) {
         Registry registry = registryFactory.getRegistry(registryUrl);
         registry.register(registedProviderUrl);
     }
 
+    /**
+     * serviceConfig export.
+     *
+     * 1. local export .
+     * 2. register to registry.
+     */
     @Override
     public <T> Exporter<T> export(final Invoker<T> originInvoker) throws RpcException {
-        //export invoker
+        // export invoker
+        // export invoker to local server / like dubbo provider server . NettyServer RestServer ect.
         final ExporterChangeableWrapper<T> exporter = doLocalExport(originInvoker);
 
         URL registryUrl = getRegistryUrl(originInvoker);
@@ -144,6 +154,7 @@ public class RegistryProtocol implements Protocol {
         ProviderConsumerRegTable.registerProvider(originInvoker, registryUrl, registeredProviderUrl);
 
         if (register) {
+            //XXX + why didn't use registry directly.
             register(registryUrl, registeredProviderUrl);
             ProviderConsumerRegTable.getProviderWrapper(originInvoker).setReg(true);
         }
@@ -243,8 +254,16 @@ public class RegistryProtocol implements Protocol {
     /**
      * Get the address of the providerUrl through the url of the invoker
      *
-     * @param origininvoker
-     * @return
+     * the url of invoker like
+     * registry://registry-host/org.apache.dubbo.registry.RegistryService?
+     * export=URL.encode("dubbo://service-host/com.foo.FooService?version=1.0.0")
+     *
+     * this provider url is
+     *
+     * dubbo://service-host/com.foo.FooService?version=1.0.0
+     *
+     * @param origininvoker originInvoker.
+     * @return provider url
      */
     private URL getProviderUrl(final Invoker<?> origininvoker) {
         String export = origininvoker.getUrl().getParameterAndDecoded(Constants.EXPORT_KEY);
@@ -289,6 +308,10 @@ public class RegistryProtocol implements Protocol {
         return doRefer(cluster, registry, type, url);
     }
 
+    /**
+     * deal with group merge.
+     * @return
+     */
     private Cluster getMergeableCluster() {
         return ExtensionLoader.getExtensionLoader(Cluster.class).getExtension("mergeable");
     }

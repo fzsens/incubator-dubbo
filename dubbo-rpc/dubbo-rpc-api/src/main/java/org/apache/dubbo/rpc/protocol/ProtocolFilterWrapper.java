@@ -43,6 +43,14 @@ public class ProtocolFilterWrapper implements Protocol {
         this.protocol = protocol;
     }
 
+    /**
+     * filterChain mechanism
+     * 0. filter wrap with {@link Invoker} so you can use the same
+     *    {@link Invoker} API to do anythings but have no-sens about {@link Filter}
+     * 1. actually invoker be wrap in the lowest level (last filter).
+     * 2. first filter will first  execute.
+     * 3. when first filter execute . a recursion call start.
+     */
     private static <T> Invoker<T> buildInvokerChain(final Invoker<T> invoker, String key, String group) {
         Invoker<T> last = invoker;
         List<Filter> filters = ExtensionLoader.getExtensionLoader(Filter.class).getActivateExtension(invoker.getUrl(), key, group);

@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * statistics provider and consumer data
+ *
  * @date 2017/11/23
  */
 public class ProviderConsumerRegTable {

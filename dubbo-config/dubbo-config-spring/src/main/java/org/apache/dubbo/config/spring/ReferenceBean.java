@@ -37,6 +37,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
+ * dubbo referenceBean is a FactoryBean.
+ *
  * ReferenceFactoryBean
  */
 public class ReferenceBean<T> extends ReferenceConfig<T> implements FactoryBean, ApplicationContextAware, InitializingBean, DisposableBean {

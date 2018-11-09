@@ -22,7 +22,7 @@ import org.apache.dubbo.common.Node;
  * Invoker. (API/SPI, Prototype, ThreadSafe)
  *
  * <p/>
- * dubbo's core domain . it represent a executeable entity (local/remote/cluster)
+ * dubbo's core domain . it represent a executable entity (local/remote/cluster)
  *
  * that you can start a remote produce call by using it.
  *
