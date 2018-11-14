@@ -384,6 +384,7 @@ public class DubboProtocol extends AbstractProtocol {
     private ExchangeClient[] getClients(URL url) {
         // whether to share connection
         boolean service_share_connect = false;
+        // client concurrent control
         int connections = url.getParameter(Constants.CONNECTIONS_KEY, 0);
         // if not configured, connection is shared, otherwise, one connection for one service
         if (connections == 0) {
