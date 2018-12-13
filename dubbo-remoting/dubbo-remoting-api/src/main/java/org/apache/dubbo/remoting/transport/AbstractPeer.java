@@ -24,10 +24,14 @@ import org.apache.dubbo.remoting.Endpoint;
 import org.apache.dubbo.remoting.RemotingException;
 
 /**
+ * point to point communication
+ *
  * AbstractPeer
  */
 public abstract class AbstractPeer implements Endpoint, ChannelHandler {
-
+    /**
+     * delegate of {@link DubboProtocol#requestHandler}
+     */
     private final ChannelHandler handler;
 
     private volatile URL url;

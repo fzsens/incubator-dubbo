@@ -39,6 +39,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static java.util.Collections.unmodifiableCollection;
 
 /**
+ * exchange represents request-response layer.
+ *
  * ExchangeServerImpl
  */
 public class HeaderExchangeServer implements ExchangeServer {
@@ -153,6 +155,7 @@ public class HeaderExchangeServer implements ExchangeServer {
     @Override
     public Collection<ExchangeChannel> getExchangeChannels() {
         Collection<ExchangeChannel> exchangeChannels = new ArrayList<ExchangeChannel>();
+        // get channels from server
         Collection<Channel> channels = server.getChannels();
         if (channels != null && !channels.isEmpty()) {
             for (Channel channel : channels) {

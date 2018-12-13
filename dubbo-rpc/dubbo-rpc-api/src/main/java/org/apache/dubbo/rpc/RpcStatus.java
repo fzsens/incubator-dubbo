@@ -26,6 +26,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ *
+ * global variable . statistics service invoke information.
+ *
  * URL statistics. (API, Cached, ThreadSafe)
  *
  * @see org.apache.dubbo.rpc.filter.ActiveLimitFilter

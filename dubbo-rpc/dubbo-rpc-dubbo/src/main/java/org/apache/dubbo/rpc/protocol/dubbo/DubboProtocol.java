@@ -259,6 +259,7 @@ public class DubboProtocol extends AbstractProtocol {
         // export service.
         String key = serviceKey(url);
         DubboExporter<T> exporter = new DubboExporter<T>(invoker, key, exporterMap);
+        // when remote invoke service , get invoker from exporterMap
         exporterMap.put(key, exporter);
 
         //export an stub service for dispatching event

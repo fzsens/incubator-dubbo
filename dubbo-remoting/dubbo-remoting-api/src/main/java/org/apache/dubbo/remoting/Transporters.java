@@ -40,6 +40,12 @@ public class Transporters {
         return bind(URL.valueOf(url), handler);
     }
 
+    /**
+     * @param url url
+     * @param handlers handlers
+     * @return transporter layer server
+     * @throws RemotingException
+     */
     public static Server bind(URL url, ChannelHandler... handlers) throws RemotingException {
         if (url == null) {
             throw new IllegalArgumentException("url == null");

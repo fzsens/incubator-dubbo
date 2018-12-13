@@ -24,7 +24,7 @@ import java.util.Collection;
 /**
  * ExchangeServer. (API/SPI, Prototype, ThreadSafe)
  */
-public interface ExchangeServer extends Server {
+public interface  ExchangeServer extends Server {
 
     /**
      * get channels.

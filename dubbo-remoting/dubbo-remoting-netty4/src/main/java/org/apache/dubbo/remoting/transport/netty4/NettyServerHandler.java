@@ -68,6 +68,7 @@ public class NettyServerHandler extends ChannelDuplexHandler {
             if (channel != null) {
                 channels.put(NetUtils.toAddressString((InetSocketAddress) ctx.channel().remoteAddress()), channel);
             }
+            // delegate to NettyServer aka DubboProtocol#requestHandler.
             handler.connected(channel);
         } finally {
             NettyChannel.removeChannelIfDisconnected(ctx.channel());
@@ -79,6 +80,7 @@ public class NettyServerHandler extends ChannelDuplexHandler {
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.channel(), url, handler);
         try {
             channels.remove(NetUtils.toAddressString((InetSocketAddress) ctx.channel().remoteAddress()));
+            // delegate to NettyServer aka DubboProtocol#requestHandler.
             handler.disconnected(channel);
         } finally {
             NettyChannel.removeChannelIfDisconnected(ctx.channel());
@@ -89,6 +91,7 @@ public class NettyServerHandler extends ChannelDuplexHandler {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.channel(), url, handler);
         try {
+            // delegate to NettyServer aka DubboProtocol#requestHandler.
             handler.received(channel, msg);
         } finally {
             NettyChannel.removeChannelIfDisconnected(ctx.channel());
@@ -101,6 +104,7 @@ public class NettyServerHandler extends ChannelDuplexHandler {
         super.write(ctx, msg, promise);
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.channel(), url, handler);
         try {
+            // delegate to NettyServer aka DubboProtocol#requestHandler.
             handler.sent(channel, msg);
         } finally {
             NettyChannel.removeChannelIfDisconnected(ctx.channel());
@@ -112,6 +116,7 @@ public class NettyServerHandler extends ChannelDuplexHandler {
             throws Exception {
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.channel(), url, handler);
         try {
+            // delegate to NettyServer aka DubboProtocol#requestHandler.
             handler.caught(channel, cause);
         } finally {
             NettyChannel.removeChannelIfDisconnected(ctx.channel());

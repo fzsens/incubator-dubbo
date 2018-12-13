@@ -23,6 +23,7 @@ import java.net.InetSocketAddress;
 /**
  * Endpoint. (API/SPI, Prototype, ThreadSafe)
  *
+ * abstract of network communication
  *
  * @see org.apache.dubbo.remoting.Channel
  * @see org.apache.dubbo.remoting.Client

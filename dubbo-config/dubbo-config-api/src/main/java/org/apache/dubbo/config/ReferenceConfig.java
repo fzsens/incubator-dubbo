@@ -362,8 +362,10 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
             }
 
             if (urls.size() == 1) {
+                // only one remote provider
                 invoker = refprotocol.refer(interfaceClass, urls.get(0));
             } else {
+                // cluster provider
                 List<Invoker<?>> invokers = new ArrayList<Invoker<?>>();
                 URL registryURL = null;
                 for (URL url : urls) {

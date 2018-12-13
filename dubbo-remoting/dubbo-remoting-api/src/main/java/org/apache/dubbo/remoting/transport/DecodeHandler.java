@@ -51,7 +51,7 @@ public class DecodeHandler extends AbstractChannelHandlerDelegate {
         handler.received(channel, message);
     }
 
-    private void decode(Object message) {
+    private void  decode(Object message) {
         if (message != null && message instanceof Decodeable) {
             try {
                 ((Decodeable) message).decode();

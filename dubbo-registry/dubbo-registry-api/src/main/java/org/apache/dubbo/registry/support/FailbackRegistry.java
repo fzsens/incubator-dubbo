@@ -307,9 +307,13 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         }
     }
 
-    // Retry the failed actions
+    /**
+     * Retry the failed actions
+     * timer retry failed registeredUrl
+     */
     protected void retry() {
         if (!failedRegistered.isEmpty()) {
+            // write with copy
             Set<URL> failed = new HashSet<URL>(failedRegistered);
             if (failed.size() > 0) {
                 if (logger.isInfoEnabled()) {
