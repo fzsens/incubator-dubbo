@@ -40,6 +40,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * cluster mock list of invoker.
+ *
  * AbstractClusterInvoker
  */
 public abstract class AbstractClusterInvoker<T> implements Invoker<T> {

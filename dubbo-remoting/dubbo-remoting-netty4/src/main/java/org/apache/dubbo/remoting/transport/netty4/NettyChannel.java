@@ -91,6 +91,12 @@ final class NettyChannel extends AbstractChannel {
         return !isClosed() && channel.isActive();
     }
 
+    /**
+     * {@link DubboInvoker#doInvoke} last phase.
+     * @param message
+     * @param sent
+     * @throws RemotingException
+     */
     @Override
     public void send(Object message, boolean sent) throws RemotingException {
         super.send(message, sent);

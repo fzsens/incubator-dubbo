@@ -25,6 +25,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
+ *
+ * Invoker Proxy call start point.
+ *
  * InvokerHandler
  */
 public class InvokerInvocationHandler implements InvocationHandler {
@@ -35,6 +38,9 @@ public class InvokerInvocationHandler implements InvocationHandler {
         this.invoker = handler;
     }
 
+    /**
+     * DubboInvoker first phase
+     */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         String methodName = method.getName();

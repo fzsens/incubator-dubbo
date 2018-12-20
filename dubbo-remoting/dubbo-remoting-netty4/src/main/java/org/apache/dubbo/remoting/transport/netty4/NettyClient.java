@@ -157,6 +157,7 @@ public class NettyClient extends AbstractClient {
     protected org.apache.dubbo.remoting.Channel getChannel() {
         Channel c = channel;
         if (c == null || !c.isActive()) {
+            // NPE
             return null;
         }
         return NettyChannel.getOrAddChannel(c, getUrl(), this);
